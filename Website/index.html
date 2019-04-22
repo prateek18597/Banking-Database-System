@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="js/RegisterCustomer.js"></script>
+  <link href="/css/RegisterCustomer.css">
+</head>
+<body>
+
+<h2>Customer Registration</h2>
+
+<div>
+  <form action="http://127.0.0.1:8080/register_customer" method="post">
+    <label for="name">First Name</label>
+    <input type="text" id="name" name="firstname" placeholder="Your First Name..">
+
+    <label for="lname">Last Name</label>
+    <input type="text" id="lname" name="lastname" placeholder="Your Last Name..">
+
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" name="birthdate">
+
+    <label for="mobile">Mobile Number</label>
+    <input type="text" id="mobile" name="mobilenumber" placeholder="Your Mobile Number.." maxlength="10" onkeypress="return isNumberKey(event)">
+
+    <label for="address">Address</label>
+    <input type="text" id="address" name="address" placeholder="Your Address..">
+
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+  
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+</body>
+</html>
