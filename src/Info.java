@@ -18,5 +18,5 @@ public class Info {
     static String AccountNo="";
     static String LastLogin="";
     static String selectedRecordId="";
-    static String url="jdbc:mysql://172.16.44.7:3306/Banking";
+    static String url="jdbc:mysql://172.16.44.7:3306/Bank";
 }

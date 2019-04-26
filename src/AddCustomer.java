@@ -1,3 +1,11 @@
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -26,6 +34,8 @@ public class AddCustomer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jDialog1 = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -38,15 +48,28 @@ public class AddCustomer extends javax.swing.JFrame {
         femaleTb = new javax.swing.JRadioButton();
         contactnumberTf = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
+        addressTA = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
+        typeCB = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        dob = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+
+        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
+        jDialog1.getContentPane().setLayout(jDialog1Layout);
+        jDialog1Layout.setHorizontalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog1Layout.setVerticalGroup(
+            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,8 +83,11 @@ public class AddCustomer extends javax.swing.JFrame {
 
         jLabel6.setText("Gender");
 
+        buttonGroup1.add(maleRb);
+        maleRb.setSelected(true);
         maleRb.setText("Male");
 
+        buttonGroup1.add(femaleTb);
         femaleTb.setText("Female");
 
         contactnumberTf.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -70,11 +96,22 @@ public class AddCustomer extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        addressTA.setColumns(20);
+        addressTA.setRows(5);
+        jScrollPane1.setViewportView(addressTA);
 
         jLabel1.setText("Date of Birth");
+
+        typeCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Current", "Saving" }));
+
+        jLabel8.setText("Account Type");
+
+        dob.setText("yyyymmdd");
+        dob.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dobMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -99,19 +136,21 @@ public class AddCustomer extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(femaleTb)
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addContainerGap(24, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel8))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(maleRb)
-                            .addComponent(contactnumberTf, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 24, Short.MAX_VALUE))))
+                            .addComponent(contactnumberTf, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                            .addComponent(typeCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dob))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,12 +179,16 @@ public class AddCustomer extends javax.swing.JFrame {
                     .addComponent(contactnumberTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(dob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(typeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Add Patient");
+        jButton1.setText("Create");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -180,7 +223,7 @@ public class AddCustomer extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -202,7 +245,7 @@ public class AddCustomer extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("ADD CUSTOMER");
+        jLabel7.setText("CREATE ACCOUNT");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -214,7 +257,7 @@ public class AddCustomer extends javax.swing.JFrame {
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -225,14 +268,26 @@ public class AddCustomer extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 147, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    void reset()
+    {
+        firstnameTf.setText(null);
+        lastnameTf.setText(null);
+        dob.setText("yyyy-mm-dd");
+        addressTA.setText(null);
+        contactnumberTf.setText(null);
+        maleRb.setSelected(true);
+    }
+    
     private void contactnumberTfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contactnumberTfKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_contactnumberTfKeyPressed
@@ -243,32 +298,37 @@ public class AddCustomer extends javax.swing.JFrame {
         ResultSet rs=null;
         String firstname=firstnameTf.getText().trim();
         String lastname=lastnameTf.getText().trim();
-        int age=Integer.parseInt(ageTf.getText().trim());
+        String date=dob.getText().trim();
+        System.out.println(date);
         String contactno=contactnumberTf.getText().trim();
-        String gender="M";
+        String gender="Male";
+        String type=(String)typeCB.getSelectedItem();
+        
         if(femaleTb.isSelected())
-        gender="F";
-
+            gender="Female";
+        String address=addressTA.getText().trim();
         try
         {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
             stat=myConn.createStatement();
-            rs=stat.executeQuery("Select count(*) from Patient");
-            int count=0;
+            System.out.println("Before Insert");
+            stat.executeUpdate("insert into Customer(FirstName,LastName,DOB,Address,MobNo,Gender) values('"+firstname+"','"+lastname+"','"+date+"','"+address+"','"+contactno+"','"+gender+"')");
+            rs=stat.executeQuery("Select Id from Customer where MobNo='"+contactno+"'");
             if(rs.next())
             {
-                count=Integer.parseInt(rs.getString(1));
-            }
-
-            count++;
-            int status=stat.executeUpdate("insert into Patient values('P"+count+"','"+firstname+"','"+lastname+"',"+age+",'"+gender+"','"+contactno+"')");
-            JOptionPane.showMessageDialog(rootPane, "Successfully Added Patient in Database. Patient Id is P"+count+".");
-            int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to Appoint a Doctor?","Yes",dialogButton);
-            if(dialogResult == JOptionPane.YES_OPTION){
-                this.dispose();
-                new EnterSymptoms().setVisible(true);
-                System.out.println("Switch to Appoint Doctor Page.");
+                Statement stat1 = myConn.createStatement();
+                ResultSet rs1=null;
+                CustomerAccount.customerId=rs.getInt(1);
+                System.out.println(CustomerAccount.customerId);
+                stat1.executeUpdate("insert into Account(Balance,Doc,Branch,Type,CustomerId) values(0,curdate(),'"+Info.UserId.substring(0,5)+"','"+type+"',"+CustomerAccount.customerId+")");
+                rs1=stat1.executeQuery("Select AccountNo from Account where CustomerId='"+CustomerAccount.customerId+"'");
+                int accountNo;
+                if(rs1.next())
+                {
+                    accountNo=rs1.getInt(1);
+                    JOptionPane.showMessageDialog(rootPane, "Successfully Created Account. AccountNo is "+accountNo);
+                }
+                
             }
             this.reset();
         }
@@ -289,10 +349,24 @@ public class AddCustomer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        new AdminHome().setVisible(true);
+        if(Info.Role.equals("Bank"))
+        {
+            this.dispose();
+            new BankHome().setVisible(true);
+        }
+        else
+        {
+            this.dispose();
+            new EmployeeHome().setVisible(true);
+        }
         this.setVisible(false);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void dobMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dobMouseClicked
+        // TODO add your handling code here:
+        dob.setText(null);
+    }//GEN-LAST:event_dobMouseClicked
 
     /**
      * @param args the command line arguments
@@ -330,13 +404,17 @@ public class AddCustomer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea addressTA;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField contactnumberTf;
+    private javax.swing.JTextField dob;
     private javax.swing.JRadioButton femaleTb;
     private javax.swing.JTextField firstnameTf;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -344,12 +422,12 @@ public class AddCustomer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     private javax.swing.JTextField lastnameTf;
     private javax.swing.JRadioButton maleRb;
+    private javax.swing.JComboBox<String> typeCB;
     // End of variables declaration//GEN-END:variables
 }
