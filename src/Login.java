@@ -9,6 +9,8 @@
  * @author pratik
  */
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
 
@@ -31,6 +33,7 @@ public class Login extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jXLoginPane1 = new org.jdesktop.swingx.JXLoginPane();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -40,6 +43,8 @@ public class Login extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jButton2.setText("Activate Account");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -51,7 +56,9 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jXLoginPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(118, 118, 118)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -62,7 +69,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jXLoginPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -75,7 +84,7 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 41, Short.MAX_VALUE))
         );
 
         pack();
@@ -85,10 +94,12 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         String username=jXLoginPane1.getUserName().trim();
         String password=String.valueOf(jXLoginPane1.getPassword());
+        Connection conn=null;
         try
         {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            Connection conn=DriverManager.getConnection(Info.url, Info.user, Info.pass);
+            conn=DriverManager.getConnection(Info.url, Info.user, Info.pass);
+            conn.setAutoCommit(false);
             Statement stat=conn.createStatement();
             ResultSet rs=null;
             String query="Select *,now() from Netbanking where UserId='"+username+"' and Password='"+password+"'";
@@ -134,9 +145,15 @@ public class Login extends javax.swing.JFrame {
                 }
         
             }
+            conn.commit();
         }
         catch(Exception e)
         {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
         
@@ -181,6 +198,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private org.jdesktop.swingx.JXLoginPane jXLoginPane1;
     // End of variables declaration//GEN-END:variables

@@ -3,7 +3,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -310,6 +313,7 @@ public class AddCustomer extends javax.swing.JFrame {
         try
         {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
             stat=myConn.createStatement();
             System.out.println("Before Insert");
             stat.executeUpdate("insert into Customer(FirstName,LastName,DOB,Address,MobNo,Gender) values('"+firstname+"','"+lastname+"','"+date+"','"+address+"','"+contactno+"','"+gender+"')");
@@ -327,13 +331,19 @@ public class AddCustomer extends javax.swing.JFrame {
                 {
                     accountNo=rs1.getInt(1);
                     JOptionPane.showMessageDialog(rootPane, "Successfully Created Account. AccountNo is "+accountNo);
+                    myConn.commit();
                 }
                 
             }
             this.reset();
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
+            try {
+                myConn.rollback();
+            } catch (SQLException ex) {
+                Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
+            }
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
         // TODO add your handling code here:
