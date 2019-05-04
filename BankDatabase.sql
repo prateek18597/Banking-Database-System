@@ -81,7 +81,7 @@ CREATE TABLE `Account` (
 
 LOCK TABLES `Account` WRITE;
 /*!40000 ALTER TABLE `Account` DISABLE KEYS */;
-INSERT INTO `Account` VALUES (1234500002,0,'2019-04-25','12345','Current',3),(1234500003,0,'2019-04-25','12345','Saving',4);
+INSERT INTO `Account` VALUES (1234500002,1633,'2019-04-25','12345','Current',3),(1234500003,367,'2019-04-25','12345','Saving',4);
 /*!40000 ALTER TABLE `Account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,6 +132,33 @@ LOCK TABLES `Bank` WRITE;
 /*!40000 ALTER TABLE `Bank` DISABLE KEYS */;
 INSERT INTO `Bank` VALUES ('12345','IIT Jammu','123456');
 /*!40000 ALTER TABLE `Bank` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `Beneficiary`
+--
+
+DROP TABLE IF EXISTS `Beneficiary`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Beneficiary` (
+  `AccountNo` int(15) NOT NULL,
+  `BeneAccount` int(15) NOT NULL,
+  PRIMARY KEY (`AccountNo`,`BeneAccount`),
+  KEY `BeneAccount` (`BeneAccount`),
+  CONSTRAINT `Beneficiary_ibfk_1` FOREIGN KEY (`AccountNo`) REFERENCES `Account` (`AccountNo`),
+  CONSTRAINT `Beneficiary_ibfk_2` FOREIGN KEY (`BeneAccount`) REFERENCES `Account` (`AccountNo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Beneficiary`
+--
+
+LOCK TABLES `Beneficiary` WRITE;
+/*!40000 ALTER TABLE `Beneficiary` DISABLE KEYS */;
+INSERT INTO `Beneficiary` VALUES (1234500003,1234500002);
+/*!40000 ALTER TABLE `Beneficiary` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -230,7 +257,7 @@ CREATE TABLE `Netbanking` (
   `Password` varchar(20) NOT NULL,
   `TransactionPassword` varchar(20) NOT NULL,
   `AccountNo` int(15) DEFAULT NULL,
-  `LastLogin` date DEFAULT NULL,
+  `LastLogin` datetime DEFAULT NULL,
   `Role` enum('Customer','Employee') NOT NULL,
   PRIMARY KEY (`UserId`),
   KEY `AccountNo` (`AccountNo`),
@@ -244,6 +271,7 @@ CREATE TABLE `Netbanking` (
 
 LOCK TABLES `Netbanking` WRITE;
 /*!40000 ALTER TABLE `Netbanking` DISABLE KEYS */;
+INSERT INTO `Netbanking` VALUES ('pratik18597','1234','1234',1234500003,'2019-05-04 00:00:00','Customer');
 /*!40000 ALTER TABLE `Netbanking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,13 +287,13 @@ CREATE TABLE `Transaction` (
   `FromAcc` int(15) NOT NULL,
   `ToAcc` int(15) NOT NULL,
   `Time` datetime NOT NULL,
-  `Balance` int(11) NOT NULL,
+  `Amount` int(11) NOT NULL,
   PRIMARY KEY (`Id`),
   KEY `FromAcc` (`FromAcc`),
   KEY `ToAcc` (`ToAcc`),
   CONSTRAINT `Transaction_ibfk_1` FOREIGN KEY (`FromAcc`) REFERENCES `Account` (`AccountNo`),
   CONSTRAINT `Transaction_ibfk_2` FOREIGN KEY (`ToAcc`) REFERENCES `Account` (`AccountNo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,6 +302,7 @@ CREATE TABLE `Transaction` (
 
 LOCK TABLES `Transaction` WRITE;
 /*!40000 ALTER TABLE `Transaction` DISABLE KEYS */;
+INSERT INTO `Transaction` VALUES (1,1234500003,1234500002,'2019-05-04 20:55:46',300),(2,1234500003,1234500002,'2019-05-04 20:58:26',100),(3,1234500003,1234500002,'2019-05-04 20:58:33',100),(4,1234500003,1234500002,'2019-05-04 21:05:26',133);
 /*!40000 ALTER TABLE `Transaction` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -286,4 +315,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-04  2:21:22
+-- Dump completed on 2019-05-05  1:26:44
