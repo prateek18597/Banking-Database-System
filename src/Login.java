@@ -123,7 +123,7 @@ public class Login extends javax.swing.JFrame {
                     
                     
                     Statement stat1=conn.createStatement();
-                    String query1="Update Netbanking Set LastLogin=curdate() where UserId='"+username+"'";
+                    String query1="Update Netbanking Set LastLogin=now() where UserId='"+username+"'";
                     stat1.executeUpdate(query1);
                     new EmployeeHome().setVisible(true);
                     this.dispose();
@@ -133,7 +133,7 @@ public class Login extends javax.swing.JFrame {
                     System.out.println("Before Fill");
                     CustomerInfo.fillDetails(username);
                     Statement stat1=conn.createStatement();
-                    String query1="Update Netbanking Set LastLogin=curdate() where UserId='"+username+"'";
+                    String query1="Update Netbanking Set LastLogin=now() where UserId='"+username+"'";
                     stat1.executeUpdate(query1);
                     new CustomerHome().setVisible(true);
                     this.dispose();

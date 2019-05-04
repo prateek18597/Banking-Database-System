@@ -35,6 +35,7 @@ public class CustomerHome extends javax.swing.JFrame {
     public CustomerHome() {
         initComponents();
         jButton1.setFont(jButton1.getFont().deriveFont(Font.BOLD));
+        balanceLabel.setVisible(false);
     }
 
     /**
@@ -399,11 +400,13 @@ public class CustomerHome extends javax.swing.JFrame {
         {
             balanceUpdate();
             b=true;
+            balanceLabel.setVisible(true);
             jButton6.setText("Hide Balance");
         }
         else
         {
             b=false;
+            balanceLabel.setVisible(false);
             balanceLabel.setText(null);
             balance.stop();
             jButton6.setText("Show Balance");

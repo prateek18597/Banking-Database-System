@@ -231,8 +231,8 @@ CREATE TABLE `Loan` (
   `AccountNo` int(15) NOT NULL,
   `LoanAmount` int(11) NOT NULL,
   `Paid` int(11) NOT NULL,
-  `Status` enum('Request','Approve','Complete') DEFAULT NULL,
-  `Type` enum('Personal','Home','Vehicle','Business') NOT NULL DEFAULT 'Personal',
+  `Status` enum('Request','Approve','Complete','Reject') NOT NULL DEFAULT 'Request',
+  `Type` enum('Personal','Home','Vehicle','Business','Other') NOT NULL DEFAULT 'Personal',
   PRIMARY KEY (`LoanId`),
   KEY `AccountNo` (`AccountNo`),
   CONSTRAINT `Loan_ibfk_1` FOREIGN KEY (`AccountNo`) REFERENCES `Account` (`AccountNo`)
@@ -354,7 +354,7 @@ CREATE TABLE `Netbanking` (
 
 LOCK TABLES `Netbanking` WRITE;
 /*!40000 ALTER TABLE `Netbanking` DISABLE KEYS */;
-INSERT INTO `Netbanking` VALUES ('pratik18597','1234','1234',1234500003,'2019-05-05 00:00:00','Customer');
+INSERT INTO `Netbanking` VALUES ('pratik18597','1234','1234',1234500003,'2019-05-05 05:11:58','Customer');
 /*!40000 ALTER TABLE `Netbanking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -416,4 +416,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-05  4:19:58
+-- Dump completed on 2019-05-05  5:13:03

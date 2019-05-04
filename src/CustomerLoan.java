@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -72,6 +73,8 @@ public class CustomerLoan extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton8 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -326,18 +329,35 @@ public class CustomerLoan extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Amount Paid", "Date and Time"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jButton8.setText("Show");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Amount Left to be Paid");
+
+        jTextField3.setEditable(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -356,7 +376,12 @@ public class CustomerLoan extends javax.swing.JFrame {
                         .addGap(370, 370, 370))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -366,10 +391,14 @@ public class CustomerLoan extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addComponent(jButton8)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jTabbedPane4.addTab("View Loan Details", jPanel4);
@@ -396,6 +425,11 @@ public class CustomerLoan extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         jButton9.setText("Show");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -508,11 +542,14 @@ public class CustomerLoan extends javax.swing.JFrame {
             }
             if(count!=0){
                 jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(loanid));
+                jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(loanid));
                 jButton6.setEnabled(true);
+                jButton8.setEnabled(true);
             }
             else
             {
                 jButton6.setEnabled(false);
+                jButton8.setEnabled(false);
             }
         }
         catch (Exception e) {
@@ -527,9 +564,10 @@ public class CustomerLoan extends javax.swing.JFrame {
                 try
                 {
                     rs = stat.executeQuery(query);
-                    while(rs.next())
+                    if(rs.next())
                     {
                         int a1 = rs.getInt(1);
+                        jTextField1.setText(a1+"");
                     }
                 }
                 catch (Exception e) {
@@ -670,6 +708,84 @@ public class CustomerLoan extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select * from Loan where AccountNo="+CustomerInfo.accountno;
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a3 = rs.getInt(3);
+                String a4=rs.getString(4);
+                String a5=rs.getString(5);
+                String a6=rs.getString(6);
+                
+                model.addRow(new Object[] {a1,a3,a4,a5,a6});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        int loanid=(int)jComboBox3.getSelectedItem();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select AmountPaid,Time,LoanAmount-Paid from LoanLog,Loan where Loan.LoanId=LoanLog.LoanId and LoanLog.LoanId="+loanid;
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                String a4=rs.getString(2);
+                int a3=rs.getInt(3);
+                jTextField3.setText(a3+"");
+                model.addRow(new Object[] {a1,a4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -725,6 +841,7 @@ public class CustomerLoan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -736,6 +853,7 @@ public class CustomerLoan extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToolBar jToolBar1;
