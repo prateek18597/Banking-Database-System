@@ -4,6 +4,7 @@ import static java.lang.Thread.sleep;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -47,8 +48,8 @@ public class CustomerFunds extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        accTF = new javax.swing.JTextField();
+        mobTF = new javax.swing.JTextField();
         jButton6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -171,19 +172,24 @@ public class CustomerFunds extends javax.swing.JFrame {
 
         jLabel2.setText("Beneficiary's Contact Number");
 
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        accTF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField1KeyTyped(evt);
+                accTFKeyTyped(evt);
             }
         });
 
-        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+        mobTF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField2KeyTyped(evt);
+                mobTFKeyTyped(evt);
             }
         });
 
         jButton6.setText("ADD");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -199,8 +205,8 @@ public class CustomerFunds extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))))
+                            .addComponent(accTF)
+                            .addComponent(mobTF, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))))
                 .addContainerGap(83, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -209,11 +215,11 @@ public class CustomerFunds extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(accTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mobTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addComponent(jButton6)
                 .addContainerGap(162, Short.MAX_VALUE))
@@ -536,23 +542,23 @@ public class CustomerFunds extends javax.swing.JFrame {
         initialize();
     }//GEN-LAST:event_formWindowOpened
 
-    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+    private void accTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_accTFKeyTyped
         
         char c = evt.getKeyChar();
         if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) 
         {
             evt.consume();
         }        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1KeyTyped
+    }//GEN-LAST:event_accTFKeyTyped
 
-    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+    private void mobTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mobTFKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
         if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) 
         {
             evt.consume();
         }
-    }//GEN-LAST:event_jTextField2KeyTyped
+    }//GEN-LAST:event_mobTFKeyTyped
 
     private void amountTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amountTFKeyTyped
         // TODO add your handling code here:
@@ -562,6 +568,34 @@ public class CustomerFunds extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_amountTFKeyTyped
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            int acc=Integer.parseInt(accTF.getText().trim());
+            String mob=mobTF.getText().trim();
+            if(Queries.MatchAccountContact(acc, mob))
+            {
+                if(Queries.InsertBeneficiary(CustomerInfo.accountno, acc))
+                {
+                    JOptionPane.showMessageDialog(rootPane, "Beneficiary Added Successfully.");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null,"Beneficiary Addition Unsuccessful.");
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Account number and Contact number doesn\'t match.");
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -599,6 +633,7 @@ public class CustomerFunds extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField accTF;
     private javax.swing.JTextField amountTF;
     private javax.swing.JTextField balanceTF;
     private javax.swing.JTextField benContactTF;
@@ -632,14 +667,13 @@ public class CustomerFunds extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JTextField mobTF;
     private javax.swing.JLabel time;
     // End of variables declaration//GEN-END:variables
 }
