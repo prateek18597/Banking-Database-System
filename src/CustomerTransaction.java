@@ -1,9 +1,16 @@
 
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import static java.lang.Thread.sleep;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -47,13 +54,48 @@ public class CustomerTransaction extends javax.swing.JFrame {
         jTabbedPane4 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        todayTable = new javax.swing.JTable();
+        todayBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        weekTable = new javax.swing.JTable();
+        jButton7 = new javax.swing.JButton();
+        weekBtn = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        thisMonthTable = new javax.swing.JTable();
+        thisMonthBtn = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        thisYearTable = new javax.swing.JTable();
+        thisYearBtn = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane15 = new javax.swing.JScrollPane();
+        selectedDateTable = new javax.swing.JTable();
+        selectedDateBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
+        jScrollPane16 = new javax.swing.JScrollPane();
+        selectedMonthTable = new javax.swing.JTable();
+        selectedMonthBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        selectedYearTable = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jButton13 = new javax.swing.JButton();
+        selectedYearBtn = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane17 = new javax.swing.JScrollPane();
+        rangeTable1 = new javax.swing.JTable();
+        selectedDateBtn1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -146,7 +188,7 @@ public class CustomerTransaction extends javax.swing.JFrame {
         });
         jToolBar2.add(jToggleButton2);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        todayTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -154,10 +196,25 @@ public class CustomerTransaction extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Account NO.", "Time", "Debit", "Credit"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(todayTable);
+
+        todayBtn.setText("Show");
+        todayBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                todayBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -165,96 +222,544 @@ public class CustomerTransaction extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(todayBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(todayBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane4.addTab("Today", jPanel1);
 
+        weekTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane12.setViewportView(weekTable);
+
+        jButton7.setText("Show");
+
+        weekBtn.setText("Show");
+        weekBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                weekBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(weekBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(268, 268, 268)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(269, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(weekBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(165, 165, 165)
+                    .addComponent(jButton7)
+                    .addContainerGap(171, Short.MAX_VALUE)))
         );
 
         jTabbedPane4.addTab("This Week", jPanel2);
+
+        thisMonthTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane13.setViewportView(thisMonthTable);
+
+        thisMonthBtn.setText("Show");
+        thisMonthBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                thisMonthBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 717, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(thisMonthBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap()))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGap(0, 359, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(thisMonthBtn)
+                    .addContainerGap(13, Short.MAX_VALUE)))
         );
 
         jTabbedPane4.addTab("This Month", jPanel3);
+
+        thisYearTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane14.setViewportView(thisYearTable);
+
+        thisYearBtn.setText("Show");
+        thisYearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                thisYearBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 717, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addComponent(thisYearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap()))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGap(0, 359, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(thisYearBtn)
+                    .addContainerGap(13, Short.MAX_VALUE)))
         );
 
         jTabbedPane4.addTab("This Year", jPanel4);
+
+        selectedDateTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane15.setViewportView(selectedDateTable);
+
+        selectedDateBtn.setText("Show");
+        selectedDateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedDateBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Date");
+
+        jTextField1.setText("YYYYMMDD");
+        jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField1MouseClicked(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(61, 61, 61)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(382, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addComponent(selectedDateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap()))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(318, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(56, 56, 56)
+                    .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(selectedDateBtn)
+                    .addContainerGap(13, Short.MAX_VALUE)))
         );
 
         jTabbedPane4.addTab("Selected Date", jPanel5);
+
+        selectedMonthTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane16.setViewportView(selectedMonthTable);
+
+        selectedMonthBtn.setText("Show");
+        selectedMonthBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedMonthBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Month");
+
+        jTextField2.setText("YYYYMM");
+        jTextField2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField2MouseClicked(evt);
+            }
+        });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(61, 61, 61)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(selectedMonthBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jScrollPane16, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(selectedMonthBtn))
         );
 
         jTabbedPane4.addTab("Selected Month", jPanel6);
+
+        selectedYearTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane8.setViewportView(selectedYearTable);
+
+        jLabel3.setText("Year");
+
+        jTextField3.setText("YYYY");
+        jTextField3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField3MouseClicked(evt);
+            }
+        });
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
+
+        jButton13.setText("Show");
+
+        selectedYearBtn.setText("Show");
+        selectedYearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedYearBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(61, 61, 61)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(selectedYearBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel7Layout.createSequentialGroup()
+                    .addGap(268, 268, 268)
+                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(269, Short.MAX_VALUE)))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 421, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(selectedYearBtn)
+                .addContainerGap())
+            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel7Layout.createSequentialGroup()
+                    .addGap(165, 165, 165)
+                    .addComponent(jButton13)
+                    .addContainerGap(166, Short.MAX_VALUE)))
         );
 
         jTabbedPane4.addTab("Selected Year", jPanel7);
+
+        rangeTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Account NO.", "Time", "Debit", "Credit"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane17.setViewportView(rangeTable1);
+
+        selectedDateBtn1.setText("Show");
+        selectedDateBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedDateBtn1ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Start Date");
+
+        jTextField4.setText("YYYYMMDD");
+        jTextField4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField4MouseClicked(evt);
+            }
+        });
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField4KeyTyped(evt);
+            }
+        });
+
+        jLabel5.setText("End Date");
+
+        jTextField5.setText("YYYYMMDD");
+        jTextField5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField5MouseClicked(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField5KeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(selectedDateBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(61, 61, 61)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5)
+                                .addGap(61, 61, 61)
+                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(selectedDateBtn1)
+                .addContainerGap())
+        );
+
+        jTabbedPane4.addTab(" Range", jPanel8);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -266,7 +771,7 @@ public class CustomerTransaction extends javax.swing.JFrame {
                 .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane4)
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -276,8 +781,8 @@ public class CustomerTransaction extends javax.swing.JFrame {
                     .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jTabbedPane4)
-                .addContainerGap())
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -369,6 +874,401 @@ public class CustomerTransaction extends javax.swing.JFrame {
         initialize();
     }//GEN-LAST:event_formWindowOpened
 
+    private void todayBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_todayBtnActionPerformed
+        // TODO add your handling code here:
+        
+        DefaultTableModel model = (DefaultTableModel) todayTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and date(time)=curdate() order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_todayBtnActionPerformed
+
+    private void weekBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weekBtnActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) weekTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and week(Time)=week(Curdate()) order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_weekBtnActionPerformed
+
+    private void thisMonthBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thisMonthBtnActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) thisMonthTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and month(Time)=month(Curdate()) and year(time)=year(curdate()) order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_thisMonthBtnActionPerformed
+
+    private void selectedDateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedDateBtnActionPerformed
+        // TODO add your handling code here:
+        String date=jTextField1.getText().trim();
+        DefaultTableModel model = (DefaultTableModel) selectedDateTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and date(Time)='"+date+"' order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_selectedDateBtnActionPerformed
+
+    private void thisYearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thisYearBtnActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) thisYearTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and year(Time)=year(Curdate()) order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_thisYearBtnActionPerformed
+
+    private void selectedMonthBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedMonthBtnActionPerformed
+        // TODO add your handling code here:
+        String yyyymm=jTextField2.getText().trim();
+        yyyymm+="01";
+        DefaultTableModel model = (DefaultTableModel) selectedMonthTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and month(Time)=month('"+yyyymm+"') and  year(Time)=year('"+yyyymm+"') order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_selectedMonthBtnActionPerformed
+
+    private void selectedYearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedYearBtnActionPerformed
+        // TODO add your handling code here:
+        int year=Integer.parseInt(jTextField3.getText().trim());
+        DefaultTableModel model = (DefaultTableModel) selectedYearTable.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and year(Time)='"+year+"' order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_selectedYearBtnActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) 
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) 
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if ( ((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) 
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void selectedDateBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedDateBtn1ActionPerformed
+        // TODO add your handling code here:
+        String StartDate=jTextField4.getText().trim();
+        String EndDate=jTextField5.getText().trim();
+        DefaultTableModel model = (DefaultTableModel) rangeTable1.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select FromAcc,ToAcc,Time,Amount from Transaction where (FromAcc="+CustomerInfo.accountno+" or ToAcc="+CustomerInfo.accountno+") and date(Time) between '"+StartDate+"' and '"+EndDate+"' order by Time";
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                int a1 = rs.getInt(1);
+                int a2 = rs.getInt(2);
+                String a3 = rs.getString(3);
+                int a4 = rs.getInt(4);
+                String s4=a4+"";
+                if(a1==CustomerInfo.accountno)
+                    model.addRow(new Object[] {a2,a3,s4,"-"});
+                else
+                    model.addRow(new Object[] {a1,a3,"-",s4});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_selectedDateBtn1ActionPerformed
+
+    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4KeyTyped
+
+    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5KeyTyped
+
+    private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
+        // TODO add your handling code here:
+        jTextField1.setText(null);
+    }//GEN-LAST:event_jTextField1MouseClicked
+
+    private void jTextField2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField2MouseClicked
+        // TODO add your handling code here:
+        jTextField2.setText(null);
+    }//GEN-LAST:event_jTextField2MouseClicked
+
+    private void jTextField3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField3MouseClicked
+        // TODO add your handling code here:
+        jTextField3.setText(null);
+    }//GEN-LAST:event_jTextField3MouseClicked
+
+    private void jTextField4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField4MouseClicked
+        // TODO add your handling code here:
+        jTextField4.setText(null);
+    }//GEN-LAST:event_jTextField4MouseClicked
+
+    private void jTextField5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField5MouseClicked
+        // TODO add your handling code here:
+        jTextField5.setText(null);
+    }//GEN-LAST:event_jTextField5MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -406,10 +1306,17 @@ public class CustomerTransaction extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -417,13 +1324,41 @@ public class CustomerTransaction extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
+    private javax.swing.JScrollPane jScrollPane15;
+    private javax.swing.JScrollPane jScrollPane16;
+    private javax.swing.JScrollPane jScrollPane17;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane4;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JTable rangeTable1;
+    private javax.swing.JButton selectedDateBtn;
+    private javax.swing.JButton selectedDateBtn1;
+    private javax.swing.JTable selectedDateTable;
+    private javax.swing.JButton selectedMonthBtn;
+    private javax.swing.JTable selectedMonthTable;
+    private javax.swing.JButton selectedYearBtn;
+    private javax.swing.JTable selectedYearTable;
+    private javax.swing.JButton thisMonthBtn;
+    private javax.swing.JTable thisMonthTable;
+    private javax.swing.JButton thisYearBtn;
+    private javax.swing.JTable thisYearTable;
     private javax.swing.JLabel time;
+    private javax.swing.JButton todayBtn;
+    private javax.swing.JTable todayTable;
+    private javax.swing.JButton weekBtn;
+    private javax.swing.JTable weekTable;
     // End of variables declaration//GEN-END:variables
 }

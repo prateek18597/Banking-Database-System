@@ -415,6 +415,7 @@ public class CustomerHome extends javax.swing.JFrame {
         if(!this.getClass().toString().equals("CustomerHome")){
             this.dispose();
             new CustomerHome().setVisible(true);
+            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
