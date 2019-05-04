@@ -312,4 +312,43 @@ public class Queries {
             return true;
         }
     }
+    
+    public static Boolean ApplyLoan(int amount,String type) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Insert into Loan(AccountNo,LoanAmount,Paid,Status,Type) values ("+CustomerInfo.accountno+","+amount+",0,'Request','"+type+"')";
+            int k1=stat.executeUpdate(query);
+            if(k1==0)
+            {
+                JOptionPane.showMessageDialog(null, "Loan Request Unsuccessful.");
+                myConn.rollback();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Loan Request Successful.");
+                myConn.commit();
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
 }
