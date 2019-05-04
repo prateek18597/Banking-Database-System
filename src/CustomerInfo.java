@@ -129,4 +129,39 @@ public class CustomerInfo {
         UserId=null;
         interest=0.0;
     }
+    
+    public static int getBalance() throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query1="Select ";
+            query1+=" Balance";
+            query1+=" from Account where ";
+            query1+= " AccountNo="+CustomerInfo.accountno;
+            rs=stat.executeQuery(query1);
+            
+            if(rs.next())
+            {
+                    CustomerInfo.balance=rs.getInt(1);
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return CustomerInfo.balance;
+        }
+    }
 }

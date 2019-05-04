@@ -1,7 +1,19 @@
 
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.event.WindowAdapter;
+import static java.lang.Thread.sleep;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -39,6 +51,7 @@ public class CustomerHome extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
+        time = new javax.swing.JLabel();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
         jPanel1 = new javax.swing.JPanel();
@@ -49,6 +62,8 @@ public class CustomerHome extends javax.swing.JFrame {
         branchCodeLabel = new javax.swing.JLabel();
         branchNameLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
+        balanceLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -110,6 +125,9 @@ public class CustomerHome extends javax.swing.JFrame {
         jToolBar1.add(jButton5);
 
         jToolBar2.setRollover(true);
+
+        time.setText("TIme:");
+        jToolBar2.add(time);
 
         jToggleButton1.setText("Log Out");
         jToggleButton1.setFocusable(false);
@@ -190,15 +208,37 @@ public class CustomerHome extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButton6.setText("Show Balance");
+        jButton6.setFocusPainted(false);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        balanceLabel.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        balanceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        balanceLabel.setText(" ");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 417, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                    .addComponent(balanceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(97, Short.MAX_VALUE)
+                .addComponent(balanceLabel)
+                .addGap(113, 113, 113)
+                .addComponent(jButton6)
+                .addGap(93, 93, 93))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -206,9 +246,9 @@ public class CustomerHome extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -228,13 +268,69 @@ public class CustomerHome extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 206, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(12, 12, 12))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private int minute;
+    private int hour;
+    private int second;
+    
+    public void initialize() 
+    {
+
+        Thread clock = new Thread() {
+            public void run() {
+                for (;;) {
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                    Calendar cal = Calendar.getInstance();
+
+                    second = cal.get(Calendar.SECOND);
+                    minute = cal.get(Calendar.MINUTE);
+                    hour = cal.get(Calendar.HOUR);
+                    
+                    //System.out.println(hour + ":" + (minute) + ":" + second);
+                    time.setText("  "+hour + ":" + (minute) + ":" + second+"   ");
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException ex) {
+                         //...
+                    }
+                }
+            }
+        };
+        clock.start();
+    }
+    
+    Thread balance;
+    Boolean b=false;
+    
+    public void balanceUpdate()
+    {
+        balance = new Thread() {
+            public void run() {
+                for (;;) {
+                    
+                    try {
+                        balanceLabel.setText(" Rs: "+CustomerInfo.getBalance());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CustomerHome.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException ex) {
+                         //...
+                    }
+                }
+            }
+        };
+        balance.start();
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         this.dispose();
@@ -273,13 +369,31 @@ public class CustomerHome extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        initialize();
         nameLabel.setText(CustomerInfo.name);
-        lastloginLabel.setText("<b>Last Login:</b> "+CustomerInfo.lastlogin);
+        lastloginLabel.setText("Last Login: "+CustomerInfo.lastlogin);
         accountLabel.setText("Account No: "+CustomerInfo.accountno+"");
         acctypeLabel.setText("Account Type: "+CustomerInfo.type);
         branchCodeLabel.setText("Branch Code: "+CustomerInfo.branchCode);
         branchNameLabel.setText("Branch Location: "+CustomerInfo.branchName);
     }//GEN-LAST:event_formWindowOpened
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        if(b==false)
+        {
+            balanceUpdate();
+            b=true;
+            jButton6.setText("Hide Balance");
+        }
+        else
+        {
+            b=false;
+            balanceLabel.setText(null);
+            balance.stop();
+            jButton6.setText("Show Balance");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,6 +433,7 @@ public class CustomerHome extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel accountLabel;
     private javax.swing.JLabel acctypeLabel;
+    private javax.swing.JLabel balanceLabel;
     private javax.swing.JLabel branchCodeLabel;
     private javax.swing.JLabel branchNameLabel;
     private javax.swing.JButton jButton1;
@@ -326,6 +441,7 @@ public class CustomerHome extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JToggleButton jToggleButton1;
@@ -334,5 +450,6 @@ public class CustomerHome extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lastloginLabel;
     private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel time;
     // End of variables declaration//GEN-END:variables
 }
