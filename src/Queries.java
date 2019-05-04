@@ -134,7 +134,52 @@ public class Queries {
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
             String query="Insert into Beneficiary values ("+Acc+","+BenAcc+")";
-            stat.executeUpdate(query);
+            int k=stat.executeUpdate(query);
+            if(k==0)
+            {
+                JOptionPane.showMessageDialog(null, "Beneficiary Addition Unsuccessful.");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Beneficiary Added Successfully.");
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
+    
+    public static Boolean RemoveBeneficiary(int Acc,int BenAcc) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Delete from Beneficiary where AccountNo="+Acc+" and BeneAccount="+BenAcc;
+            int k=stat.executeUpdate(query);
+            if(k==1)
+            {
+                JOptionPane.showMessageDialog(null, "Beneficiary removed Successfully.");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Beneficiary removal unsuccessfully.");
+            }
         }
         catch(Exception e)
         {

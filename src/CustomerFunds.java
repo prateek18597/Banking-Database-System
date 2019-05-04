@@ -1,10 +1,17 @@
 
 import java.awt.event.KeyEvent;
 import static java.lang.Thread.sleep;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
+import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -168,6 +175,12 @@ public class CustomerFunds extends javax.swing.JFrame {
         });
         jToolBar2.add(jToggleButton2);
 
+        jTabbedPane4.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane4StateChanged(evt);
+            }
+        });
+
         jLabel1.setText("Account Number");
 
         jLabel2.setText("Beneficiary's Contact Number");
@@ -251,6 +264,11 @@ public class CustomerFunds extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton7.setText("Show");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -277,9 +295,19 @@ public class CustomerFunds extends javax.swing.JFrame {
 
         jTabbedPane4.addTab("View Beneficiary", jPanel2);
 
+        jPanel3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jPanel3FocusGained(evt);
+            }
+        });
+
         jLabel3.setText("Account Number");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
 
         jLabel4.setText("Beneficiary Name");
 
@@ -290,6 +318,11 @@ public class CustomerFunds extends javax.swing.JFrame {
         jTextField4.setEditable(false);
 
         jButton8.setText("Remove");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -299,10 +332,9 @@ public class CustomerFunds extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(45, 45, 45)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField3)
@@ -338,7 +370,11 @@ public class CustomerFunds extends javax.swing.JFrame {
 
         jLabel8.setText(" Beneficiary's Contact No");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox2ItemStateChanged(evt);
+            }
+        });
 
         benNameTF.setEditable(false);
 
@@ -360,6 +396,11 @@ public class CustomerFunds extends javax.swing.JFrame {
         jButton9.setText("Transfer");
 
         jButton11.setText("Reset");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -374,9 +415,7 @@ public class CustomerFunds extends javax.swing.JFrame {
                             .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(balanceTF)))
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel4Layout.createSequentialGroup()
@@ -579,12 +618,9 @@ public class CustomerFunds extends javax.swing.JFrame {
             {
                 if(Queries.InsertBeneficiary(CustomerInfo.accountno, acc))
                 {
-                    JOptionPane.showMessageDialog(rootPane, "Beneficiary Added Successfully.");
                 }
-                else
-                {
-                    JOptionPane.showMessageDialog(null,"Beneficiary Addition Unsuccessful.");
-                }
+                accTF.setText(null);
+                mobTF.setText(null);
             }
             else
             {
@@ -596,6 +632,194 @@ public class CustomerFunds extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, e.getMessage());
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int rows = model.getRowCount();
+        if (rows > 0) 
+        {
+            for (int i = 0; i < rows; i++) {
+                model.removeRow(0);
+            }
+        }
+        
+        String query="Select Beneficiary.BeneAccount, MobNo, Concat(FirstName,' ',LastName) from Beneficiary,Account,Customer where Beneficiary.BeneAccount=Account.AccountNo and Account.CustomerId=Customer.Id and Beneficiary.AccountNo="+CustomerInfo.accountno;
+        
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                String a1 = rs.getString(1);
+                String a2 = rs.getString(2);
+                String a3 = rs.getString(3);
+                
+                model.addRow(new Object[] {a1,a3,a2});
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jPanel3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPanel3FocusGained
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jPanel3FocusGained
+    
+    int count=0;
+    
+    
+    void fillCB()
+    {
+        String query="Select Beneficiary.BeneAccount from Beneficiary where Beneficiary.AccountNo="+CustomerInfo.accountno;
+        count=0;
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        Vector<Integer> bene;
+        bene = new Vector();
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                count++;
+                bene.add(rs.getInt(1));
+            }
+            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(bene));
+            jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(bene));
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        finally
+        {
+            if(count!=0)
+            {
+                int acc=((int) jComboBox1.getSelectedItem());
+                query="Select MobNo, Concat(FirstName,' ',LastName) from Account,Customer where Account.CustomerId=Customer.Id and AccountNo="+acc;
+                try
+                {
+                    rs = stat.executeQuery(query);
+                    while(rs.next())
+                    {
+                        String a1 = rs.getString(1);
+                        String a2 = rs.getString(2);
+                        jTextField3.setText(a2);
+                        jTextField4.setText(a1);
+                        benContactTF.setText(a1);
+                        benNameTF.setText(a2);
+                    }
+                }
+                catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, e.getMessage());
+                }
+            }
+            else
+            {
+                jTextField3.setText(null);
+                jTextField4.setText(null);
+                benContactTF.setText(null);
+                benNameTF.setText(null);
+            }
+        }
+    }
+    private void jTabbedPane4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane4StateChanged
+        // TODO add your handling code here:
+        fillCB();        
+    }//GEN-LAST:event_jTabbedPane4StateChanged
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        // TODO add your handling code here:
+        int acc=((int) jComboBox1.getSelectedItem());
+        String query="Select MobNo, Concat(FirstName,' ',LastName) from Account,Customer where Account.CustomerId=Customer.Id and AccountNo="+acc;
+        System.out.println("YES YES");
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                String a1 = rs.getString(1);
+                String a2 = rs.getString(2);
+                jTextField3.setText(a2);
+                jTextField4.setText(a1);
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            int benAcc=(int)jComboBox1.getSelectedItem();
+            Queries.RemoveBeneficiary(CustomerInfo.accountno,benAcc);
+            fillCB();
+        }
+        catch(Exception e)
+        {
+        
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        if(count!=0)
+            jComboBox2.setSelectedIndex(0);
+        benNameTF.setText(null);
+        benContactTF.setText(null);
+        amountTF.setText(null);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+        // TODO add your handling code here:
+        int acc=((int) jComboBox2.getSelectedItem());
+        String query="Select MobNo, Concat(FirstName,' ',LastName) from Account,Customer where Account.CustomerId=Customer.Id and AccountNo="+acc;
+        System.out.println("YES YES");
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            stat=myConn.createStatement();
+            rs = stat.executeQuery(query);
+            
+
+            while(rs.next())
+            {
+                String a1 = rs.getString(1);
+                String a2 = rs.getString(2);
+                benContactTF.setText(a2);
+                benNameTF.setText(a1);
+            }
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_jComboBox2ItemStateChanged
 
     /**
      * @param args the command line arguments
