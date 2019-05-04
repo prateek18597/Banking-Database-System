@@ -111,18 +111,25 @@ public class Login extends javax.swing.JFrame {
                 Info.TransactionPassword=rs.getString(3);
                 Info.AccountNo=rs.getString(4);
                 Info.LastLogin=rs.getString(5);
-                String l_login="";
-                Statement stat1=conn.createStatement();
-                String query1="Update Netbanking Set LastLogin='"+l_login+"' where UserId='"+username+"'";
-                stat1.executeUpdate(query1);
-                
+//                String l_login="";
                 if(Info.Role.equalsIgnoreCase("Employee"))
                 {
+                    
+                    
+                    
+                    Statement stat1=conn.createStatement();
+                    String query1="Update Netbanking Set LastLogin=curdate() where UserId='"+username+"'";
+                    stat1.executeUpdate(query1);
                     new EmployeeHome().setVisible(true);
                     this.dispose();
                 }
                 else
                 {
+                    System.out.println("Before Fill");
+                    CustomerInfo.fillDetails(username);
+                    Statement stat1=conn.createStatement();
+                    String query1="Update Netbanking Set LastLogin=curdate() where UserId='"+username+"'";
+                    stat1.executeUpdate(query1);
                     new CustomerHome().setVisible(true);
                     this.dispose();
                 }
@@ -133,6 +140,7 @@ public class Login extends javax.swing.JFrame {
                 rs=stat.executeQuery(query);
                 if(rs.next())
                 {
+                    Info.Role="Bank";
                     new BankHome().setVisible(true);
                     this.dispose();
                 }

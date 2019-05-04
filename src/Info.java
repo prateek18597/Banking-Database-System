@@ -18,4 +18,20 @@ public class Info {
     static String AccountNo="";
     static String LastLogin="";
     static String url="jdbc:mysql://172.16.44.7:3306/Bank";
+
+    public static void home()
+    {
+        if(Role.equals("Customer"))
+        {
+            new CustomerHome().setVisible(true);
+        }
+        else if(Role.equals("Employee"))
+        {
+         new EmployeeHome().setVisible(true);
+        }
+        else
+        {
+            new BankHome().setVisible(true);
+        }
+    }
 }
