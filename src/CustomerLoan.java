@@ -1,4 +1,5 @@
 
+import java.awt.Font;
 import static java.lang.Thread.sleep;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ public class CustomerLoan extends javax.swing.JFrame {
      */
     public CustomerLoan() {
         initComponents();
+        jButton4.setFont(jButton4.getFont().deriveFont(Font.BOLD));
     }
 
     /**

@@ -1,4 +1,5 @@
 
+import java.awt.Font;
 import static java.lang.Thread.sleep;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ public class CustomerProfile extends javax.swing.JFrame {
      */
     public CustomerProfile() {
         initComponents();
+        jButton2.setFont(jButton2.getFont().deriveFont(Font.BOLD));
     }
 
     /**

@@ -230,4 +230,47 @@ public class Queries {
         }
         return result; 
     }
+    
+    public static Boolean TransferMoney(int Acc,int BenAcc,int amount) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Update Account Set Balance=Balance-"+amount+" where AccountNo="+Acc;
+            int k1=stat.executeUpdate(query);
+            query="Update Account Set Balance=Balance+"+amount+" where AccountNo="+BenAcc;
+            int k2=stat.executeUpdate(query);
+            query="Insert into Transaction(FromAcc,ToAcc,Time,Amount) values("+Acc+","+BenAcc+",now(),"+amount+")";
+            int k3=stat.executeUpdate(query);
+            if(k1==0 || k2==0 || k3==0)
+            {
+                JOptionPane.showMessageDialog(null, "Money Transfer Unsuccessful.");
+                myConn.rollback();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Money Transfer Successful.");
+                myConn.commit();
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
 }

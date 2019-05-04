@@ -1,5 +1,6 @@
 
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Label;
 import java.awt.event.WindowAdapter;
@@ -33,6 +34,7 @@ public class CustomerHome extends javax.swing.JFrame {
      */
     public CustomerHome() {
         initComponents();
+        jButton1.setFont(jButton1.getFont().deriveFont(Font.BOLD));
     }
 
     /**

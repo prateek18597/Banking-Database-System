@@ -1,16 +1,21 @@
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import static java.lang.Thread.sleep;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -30,6 +35,7 @@ public class CustomerFunds extends javax.swing.JFrame {
      */
     public CustomerFunds() {
         initComponents();
+        jButton3.setFont(jButton3.getFont().deriveFont(Font.BOLD));
     }
 
     /**
@@ -394,6 +400,11 @@ public class CustomerFunds extends javax.swing.JFrame {
         balanceTF.setEditable(false);
 
         jButton9.setText("Transfer");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jButton11.setText("Reset");
         jButton11.addActionListener(new java.awt.event.ActionListener() {
@@ -408,7 +419,15 @@ public class CustomerFunds extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(benNameTF))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -416,25 +435,16 @@ public class CustomerFunds extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(balanceTF)))
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(amountTF))
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(benContactTF))
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(benNameTF))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(125, 125, 125))
+                            .addComponent(balanceTF, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(amountTF, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(benContactTF, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(968, 968, 968))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -524,6 +534,31 @@ public class CustomerFunds extends javax.swing.JFrame {
         clock.start();
     }
     
+    Thread balance;
+
+    public void balanceUpdate()
+    {
+        balance = new Thread() {
+            public void run() {
+                for (;;) {
+                    
+                    try {
+                        balanceTF.setText(CustomerInfo.getBalance()+"");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CustomerHome.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException ex) {
+                         //...
+                    }
+                }
+            }
+        };
+        balance.start();
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 //        if(!this.getClass().toString().equals("CustomerHome")){
@@ -579,6 +614,7 @@ public class CustomerFunds extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         initialize();
+        balanceUpdate();
     }//GEN-LAST:event_formWindowOpened
 
     private void accTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_accTFKeyTyped
@@ -820,6 +856,46 @@ public class CustomerFunds extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_jComboBox2ItemStateChanged
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            int amt=Integer.parseInt(amountTF.getText().trim());
+            if(amt>CustomerInfo.balance)
+            {
+                JOptionPane.showMessageDialog(rootPane, "Insufficient Balance.");
+                return;
+            }
+            JPasswordField pf = new JPasswordField();
+            while(true)
+            {
+                int okCxl = JOptionPane.showConfirmDialog(null, pf, "Enter Transaction Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if(okCxl==JOptionPane.OK_OPTION)
+                {
+                    String password = new String(pf.getPassword());
+                    if(password.equals(CustomerInfo.tpass))
+                    {
+                        int acc=((int) jComboBox2.getSelectedItem());
+                        Queries.TransferMoney(CustomerInfo.accountno, acc,amt);
+                        break;
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(rootPane, "Wrong Transaction Password.");
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null,e.getMessage());
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
