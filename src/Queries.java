@@ -1,6 +1,8 @@
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
@@ -16,14 +18,19 @@ import javax.swing.JOptionPane;
  */
 public class Queries {
    
-    public static Boolean AccNoContactNo(String acc,String mob)
+    public static Boolean AccNoContactNo(int acc,String mob) throws SQLException
     {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
         try
         {
-            Connection myConn=null;
-            Statement stat=null;
-            ResultSet rs=null;
-            String query="Select MobNo,AccountNo from Customer,Account where Customer.Id=Account.CustomerId and MobNo='"+mob+"' and AccountNo='"+acc+"'";
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            
+            String query="Select MobNo,AccountNo from Customer,Account where Customer.Id=Account.CustomerId and MobNo='"+mob+"' and AccountNo="+acc+"";
             rs=stat.executeQuery(query);
             if(rs.next())
             {
@@ -37,17 +44,29 @@ public class Queries {
         catch(Exception e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
         }
         return false; 
     }
     
-    public static Boolean UserIdAvailablility(String userId)
+    public static Boolean UserIdAvailablility(String userId) throws SQLException
     {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
         try
         {
-            Connection myConn=null;
-            Statement stat=null;
-            ResultSet rs=null;
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            
             String query="Select UserId from Netbanking where UserId='"+userId+"'";
             rs=stat.executeQuery(query);
             if(rs.next())
@@ -62,8 +81,44 @@ public class Queries {
         catch(Exception e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
         }
         return false; 
     }
     
+    public static Boolean InsertNetbanking(String UserId,String Password,
+            String TransactionPassword,int AccountNo,String LastLogin,String Role) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Insert into Netbanking values ('"+UserId+"','"+Password+"','"+TransactionPassword+"',"+AccountNo+",curdate(),'"+Role+"')";
+            stat.executeUpdate(query);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
 }

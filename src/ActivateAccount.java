@@ -1,5 +1,8 @@
 
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -45,8 +48,12 @@ public class ActivateAccount extends javax.swing.JFrame {
         userTF = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         msgLabel = new javax.swing.JLabel();
-        pass = new javax.swing.JPasswordField();
-        cpass = new javax.swing.JPasswordField();
+        passTF = new javax.swing.JPasswordField();
+        cpassTF = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        tpassTF = new javax.swing.JPasswordField();
+        tcpassTF = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,8 +92,18 @@ public class ActivateAccount extends javax.swing.JFrame {
         });
 
         jButton2.setText("Reset");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Close");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Home");
 
@@ -109,9 +126,19 @@ public class ActivateAccount extends javax.swing.JFrame {
         msgLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         msgLabel.setText(" ");
 
-        cpass.addActionListener(new java.awt.event.ActionListener() {
+        cpassTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cpassActionPerformed(evt);
+                cpassTFActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("TransactionPassword");
+
+        jLabel8.setText("Confirm T. Password");
+
+        tcpassTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tcpassTFActionPerformed(evt);
             }
         });
 
@@ -123,10 +150,6 @@ public class ActivateAccount extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -136,7 +159,9 @@ public class ActivateAccount extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -147,11 +172,17 @@ public class ActivateAccount extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(pass)
-                                    .addComponent(cpass)))))
+                                    .addComponent(passTF)
+                                    .addComponent(cpassTF)
+                                    .addComponent(tpassTF)
+                                    .addComponent(tcpassTF)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(msgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(msgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -174,16 +205,24 @@ public class ActivateAccount extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cpass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                    .addComponent(cpassTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(30, 30, 30)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tpassTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tcpassTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton4)
                     .addComponent(jButton3))
@@ -216,8 +255,16 @@ public class ActivateAccount extends javax.swing.JFrame {
 
     private void reset()
     {
-    
+        accTF.setText(null);
+        passTF.setText(null);
+        cpassTF.setText(null);
+        tpassTF.setText(null);
+        tcpassTF.setText(null);
+        contactTF.setText(null);
+        msgLabel.setText(" ");
+        userTF.setText(null);
     }
+    
     private void accTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_accTFKeyTyped
         // TODO add your handling code here:
        char c = evt.getKeyChar();
@@ -242,16 +289,31 @@ public class ActivateAccount extends javax.swing.JFrame {
             String acc=accTF.getText().trim();
             String mob=contactTF.getText().trim();
             String userId=userTF.getText().trim();
-            String pass=this.pass.getText().trim();
-            String cpass=this.cpass.getText().trim();
-            if(Queries.AccNoContactNo(acc, mob))
+            String pass=passTF.getText().trim();
+            String cpass=cpassTF.getText().trim();
+            String tpass=tpassTF.getText().trim();
+            String tcpass=tcpassTF.getText().trim();
+            if(Queries.AccNoContactNo(Integer.parseInt(acc), mob))
             {
                 if(Queries.UserIdAvailablility(userTF.getText().trim()))
                 {
                     msgLabel.setText(" ");
                     if(pass.equals(cpass))
                     {
-                        //Do work here.
+                        if(tpass.equals(tcpass))
+                        {
+                            if(Queries.InsertNetbanking(userId, pass, tcpass, Integer.parseInt(acc), null, "Customer")){
+                                JOptionPane.showMessageDialog(rootPane, "Account Activated Successfully.");
+                                this.reset();
+                            }
+                            else
+                                JOptionPane.showMessageDialog(rootPane, "Account Activation Unsuccessful.");
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(rootPane, "Transaction Password Doesn't match.");
+                        }
+                        
                     }
                     else
                     {
@@ -281,14 +343,18 @@ public class ActivateAccount extends javax.swing.JFrame {
     }//GEN-LAST:event_contactTFActionPerformed
 
     private void userTFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_userTFFocusLost
-        // TODO add your handling code here:
-        if(Queries.UserIdAvailablility(userTF.getText().trim()))
-        {
-            msgLabel.setText(" ");
-        }
-        else
-        {
-            msgLabel.setText("UserId not available");
+        try {
+            // TODO add your handling code here:
+            if(Queries.UserIdAvailablility(userTF.getText().trim()))
+            {
+                msgLabel.setText(" ");
+            }
+            else
+            {
+                msgLabel.setText("UserId not available");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ActivateAccount.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_userTFFocusLost
@@ -298,9 +364,23 @@ public class ActivateAccount extends javax.swing.JFrame {
         
     }//GEN-LAST:event_userTFFocusGained
 
-    private void cpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpassActionPerformed
+    private void cpassTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cpassTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cpassActionPerformed
+    }//GEN-LAST:event_cpassTFActionPerformed
+
+    private void tcpassTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tcpassTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tcpassTFActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        this.reset();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -340,7 +420,7 @@ public class ActivateAccount extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField accTF;
     private javax.swing.JTextField contactTF;
-    private javax.swing.JPasswordField cpass;
+    private javax.swing.JPasswordField cpassTF;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -351,9 +431,13 @@ public class ActivateAccount extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel msgLabel;
-    private javax.swing.JPasswordField pass;
+    private javax.swing.JPasswordField passTF;
+    private javax.swing.JPasswordField tcpassTF;
+    private javax.swing.JPasswordField tpassTF;
     private javax.swing.JTextField userTF;
     // End of variables declaration//GEN-END:variables
 }
