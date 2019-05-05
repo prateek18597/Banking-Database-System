@@ -163,25 +163,25 @@ public class EmployeeHome extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        if(!this.getClass().toString().equals("CustomerFunds")){
+        if(!this.getClass().toString().equals("LoanApproval")){
             this.dispose();
-            new CustomerFunds().setVisible(true);
+            new LoanApproval().setVisible(true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        if(!this.getClass().toString().equals("CustomerLoan")){
+        if(!this.getClass().toString().equals("EmployeeDeposit")){
             this.dispose();
-            new CustomerLoan().setVisible(true);
+            new EmployeeDeposit().setVisible(true);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        if(!this.getClass().toString().equals("CustomerTransaction")){
+        if(!this.getClass().toString().equals("CustomerHistory")){
             this.dispose();
-            new CustomerTransaction().setVisible(true);
+            new CustomerHistory().setVisible(true);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 

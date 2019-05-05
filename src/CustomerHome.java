@@ -1,5 +1,6 @@
 
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Label;
 import java.awt.event.WindowAdapter;
@@ -33,6 +34,8 @@ public class CustomerHome extends javax.swing.JFrame {
      */
     public CustomerHome() {
         initComponents();
+        jButton1.setFont(jButton1.getFont().deriveFont(Font.BOLD));
+        balanceLabel.setVisible(false);
     }
 
     /**
@@ -397,11 +400,13 @@ public class CustomerHome extends javax.swing.JFrame {
         {
             balanceUpdate();
             b=true;
+            balanceLabel.setVisible(true);
             jButton6.setText("Hide Balance");
         }
         else
         {
             b=false;
+            balanceLabel.setVisible(false);
             balanceLabel.setText(null);
             balance.stop();
             jButton6.setText("Show Balance");
@@ -413,6 +418,7 @@ public class CustomerHome extends javax.swing.JFrame {
         if(!this.getClass().toString().equals("CustomerHome")){
             this.dispose();
             new CustomerHome().setVisible(true);
+            
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
