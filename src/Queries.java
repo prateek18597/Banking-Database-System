@@ -431,4 +431,83 @@ public class Queries {
             return true;
         }
     }
+    
+    public static Boolean ApproveLoan(int loanid) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Update Loan Set Status='Approve' where LoanId="+loanid;
+            int k1=stat.executeUpdate(query);
+            if(k1==0)
+            {
+                JOptionPane.showMessageDialog(null, "Loan Approval Unsuccessful.");
+                myConn.rollback();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Loan Approved.");
+                myConn.commit();
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
+    
+    public static Boolean RejectLoan(int loanid) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Update Loan Set Status='Reject' where LoanId="+loanid;
+            int k1=stat.executeUpdate(query);
+            if(k1==0)
+            {
+                JOptionPane.showMessageDialog(null, "Loan Rejection Unsuccessful.");
+                myConn.rollback();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Loan Rejected.");
+                myConn.commit();
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
+    
 }
