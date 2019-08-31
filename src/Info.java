@@ -22,7 +22,7 @@ public class Info {
     static String TransactionPassword="";
     static String AccountNo="";
     static String LastLogin="";
-    static String url="jdbc:mysql://192.168.180.107:3306/Bank";
+    static String url="jdbc:mysql://localhost:3306/Bank";
 
     public static void home()
     {
