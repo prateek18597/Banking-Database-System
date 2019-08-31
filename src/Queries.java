@@ -226,6 +226,37 @@ public class Queries {
         }
     }
     
+    public static int getBalance(int Acc) throws SQLException{
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Select Balance from Account where AccountNo="+Acc;
+            rs=stat.executeQuery(query);
+            if(rs.next())
+            {
+                return rs.getInt(1);
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return 0;
+        }
+    }
+    
     public static Boolean RemoveBeneficiary(int Acc,int BenAcc) throws SQLException
     {
         Connection myConn=null;

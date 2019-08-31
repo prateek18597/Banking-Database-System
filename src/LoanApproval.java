@@ -302,9 +302,9 @@ public class LoanApproval extends javax.swing.JFrame {
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(!this.getClass().toString().equals("CustomerHome")){
+        if(!this.getClass().toString().equals("EmployeeHome")){
             this.dispose();
-            new CustomerHome().setVisible(true);
+            new EmployeeHome().setVisible(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -338,8 +338,10 @@ public class LoanApproval extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        new MoneyWithdraw().setVisible(true);
+        if(!this.getClass().toString().equals("MoneyWithdraw")){
+            this.dispose();
+            new MoneyWithdraw().setVisible(true);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged

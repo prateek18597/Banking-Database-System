@@ -824,13 +824,10 @@ public class CustomerFunds extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(count!=0)
             jComboBox2.setSelectedIndex(0);
-        benNameTF.setText(null);
-        benContactTF.setText(null);
-        amountTF.setText(null);
+        forStateChange();
     }//GEN-LAST:event_jButton11ActionPerformed
-
-    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
-        // TODO add your handling code here:
+    
+    private void forStateChange(){
         int acc=((int) jComboBox2.getSelectedItem());
         String query="Select MobNo, Concat(FirstName,' ',LastName) from Account,Customer where Account.CustomerId=Customer.Id and AccountNo="+acc;
         System.out.println("YES YES");
@@ -850,11 +847,16 @@ public class CustomerFunds extends javax.swing.JFrame {
                 String a2 = rs.getString(2);
                 benContactTF.setText(a2);
                 benNameTF.setText(a1);
+                amountTF.setText(null);
             }
         }
         catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+    }
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+        // TODO add your handling code here:
+        forStateChange();
     }//GEN-LAST:event_jComboBox2ItemStateChanged
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed

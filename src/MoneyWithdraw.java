@@ -244,7 +244,7 @@ public class MoneyWithdraw extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        if(!this.getClass().toString().equals("CustomerHome")){
             this.dispose();
-            new CustomerHome().setVisible(true);
+            new EmployeeHome().setVisible(true);
 //        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -284,14 +284,22 @@ public class MoneyWithdraw extends javax.swing.JFrame {
         String AcNo=jTextField1.getText().trim();
         String MobNo=jTextField2.getText().trim();
         String amount=jTextField3.getText().trim();
-        int bal=0;
+        int bal=0;  
         try
         {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
-            stat.executeUpdate("Update Account set Balance =Balance-"+amount+" where AccountNo='"+AcNo+"'");
-            JOptionPane.showMessageDialog(rootPane, "Successfully Deposited Amount in Employee.");
+             if(Queries.MatchAccountContact(Integer.parseInt(AcNo), MobNo)){
+                 if(Queries.getBalance(Integer.parseInt(AcNo)) > bal){
+                    stat.executeUpdate("Update Account set Balance =Balance-"+amount+" where AccountNo='"+AcNo+"'");
+                    JOptionPane.showMessageDialog(rootPane, "Withdraw Successful.");
+                 } else{
+                     JOptionPane.showMessageDialog(rootPane, "Insufficent Balance.");
+                 }
+             } else{
+                        JOptionPane.showMessageDialog(rootPane, "AccountNo and MobNo doesn't match.");
+             }
             myConn.commit();
             jButton8.doClick();
         }
@@ -342,6 +350,10 @@ public class MoneyWithdraw extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        if(!this.getClass().toString().equals("MoneyWithdraw")){
+            this.dispose();
+            new MoneyWithdraw().setVisible(true);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

@@ -99,6 +99,11 @@ public class MoneyDeposit extends javax.swing.JFrame {
         jButton6.setFocusable(false);
         jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton6.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton6);
 
         jToolBar2.setRollover(true);
@@ -237,9 +242,9 @@ public class MoneyDeposit extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(!this.getClass().toString().equals("CustomerHome")){
+        if(!this.getClass().toString().equals("EmployeeHome")){
             this.dispose();
-            new CustomerHome().setVisible(true);
+            new EmployeeHome().setVisible(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -292,9 +297,13 @@ public class MoneyDeposit extends javax.swing.JFrame {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
-            stat.executeUpdate("Update Account set Balance =Balance+"+amount+" where AccountNo='"+AcNo+"'");
-            JOptionPane.showMessageDialog(rootPane, "Successfully Deposited Amount in Employee.");
-            myConn.commit();
+            if(Queries.MatchAccountContact(Integer.parseInt(AcNo), MobNo)){
+                stat.executeUpdate("Update Account set Balance =Balance+"+amount+" where AccountNo='"+AcNo+"'");
+                JOptionPane.showMessageDialog(rootPane, "Successful Deposit.");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "AccountNo and MobNo doesn't match.");
+            }
+                myConn.commit();
             jButton8.doClick();
         }
         catch(SQLException e)
@@ -334,6 +343,14 @@ public class MoneyDeposit extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        if(!this.getClass().toString().equals("MoneyWithdraw")){
+            this.dispose();
+            new MoneyWithdraw().setVisible(true);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
