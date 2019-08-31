@@ -55,7 +55,7 @@ public class CustomerInfo {
             stat1=myConn.createStatement();
             stat2=myConn.createStatement();
             stat3=myConn.createStatement();
-            String query="Select * from Netbanking where UserId='"+UserId+"'";
+            String query="Select * from NetbankingC where UserId='"+UserId+"'";
             rs=stat.executeQuery(query);
             if(rs.next())
             {

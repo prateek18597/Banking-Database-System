@@ -303,11 +303,11 @@ public class ActivateAccount extends javax.swing.JFrame {
                 if(Queries.UserIdAvailablility(userTF.getText().trim()))
                 {
                     msgLabel.setText(" ");
-                    if(pass.equals(cpass))
+                    if(!pass.equals(null) && pass.equals(cpass))
                     {
-                        if(tpass.equals(tcpass))
+                        if(!tpass.equals(null) && tpass.equals(tcpass))
                         {
-                            if(Queries.InsertNetbanking(userId, pass, tcpass, Integer.parseInt(acc), null, "Customer")){
+                            if(Queries.InsertNetbanking(userId, pass, tcpass, Integer.parseInt(acc), null)){
                                 JOptionPane.showMessageDialog(rootPane, "Account Activated Successfully.");
                                 this.reset();
                             }

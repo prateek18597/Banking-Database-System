@@ -276,6 +276,11 @@ public class CustomerLoan extends javax.swing.JFrame {
         });
 
         jButton7.setText("Apply");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -785,6 +790,19 @@ public class CustomerLoan extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        try
+        { 
+            String loanType = jComboBox2.getSelectedItem().toString();
+            int loanAmount = Integer.parseInt(jTextField2.getText().trim());
+            Queries.ApplyLoan(loanAmount, loanType);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(rootPane,e.getMessage());
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments

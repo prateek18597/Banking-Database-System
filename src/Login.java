@@ -61,7 +61,7 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jXLoginPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                 .addContainerGap())
@@ -69,9 +69,9 @@ public class Login extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jXLoginPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
+                .addComponent(jXLoginPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
@@ -102,42 +102,40 @@ public class Login extends javax.swing.JFrame {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn=DriverManager.getConnection(Info.url, Info.user, Info.pass);
             conn.setAutoCommit(false);
-            Statement stat=conn.createStatement();
-            ResultSet rs=null;
-            String query="Select *,now() from Netbanking where UserId='"+username+"' and Password='"+password+"'";
-            rs=stat.executeQuery(query);
+            Statement stat = conn.createStatement();
+            ResultSet rs = null;
+            Statement statE = conn.createStatement();
+            ResultSet rsE = null;
+            String query="Select *,now() from NetbankingC where UserId='"+username+"' and Password='"+password+"'";
+            rs = stat.executeQuery(query);
             Info.UserId=username;
             if(rs.next())
             {
-                Info.Role=rs.getString(6);
+                Info.Role = "Customer";
                 Info.TransactionPassword=rs.getString(3);
                 Info.AccountNo=rs.getString(4);
                 Info.LastLogin=rs.getString(5);
-//                String l_login="";
-                if(Info.Role.equalsIgnoreCase("Employee"))
-                {
-                    
-                    
-                    
+                
+                CustomerInfo.fillDetails(username);
+                Statement stat1=conn.createStatement();
+                String query1="Update NetbankingC Set LastLogin=now() where UserId='"+username+"'";
+                stat1.executeUpdate(query1);
+                new CustomerHome().setVisible(true);
+                this.dispose();
+
+            }  else {
+                String queryE = "Select *,now() from Netbanking where UserId='"+username+"' and Password='"+password+"'";
+                rsE = statE.executeQuery(queryE);
+                if(rsE.next()){
+                    Info.Role = "Employee";
+                    Info.LastLogin=rsE.getString(4);
                     Statement stat1=conn.createStatement();
                     String query1="Update Netbanking Set LastLogin=now() where UserId='"+username+"'";
                     stat1.executeUpdate(query1);
                     new EmployeeHome().setVisible(true);
                     this.dispose();
-                }
-                else
-                {
-                    System.out.println("Before Fill");
-                    CustomerInfo.fillDetails(username);
-                    Statement stat1=conn.createStatement();
-                    String query1="Update Netbanking Set LastLogin=now() where UserId='"+username+"'";
-                    stat1.executeUpdate(query1);
-                    new CustomerHome().setVisible(true);
-                    this.dispose();
-                }
-            }
-            else
-            {
+
+                } else{
                 query="Select * from Bank where BranchCode='"+username+"' and Password='"+password+"'";
                 rs=stat.executeQuery(query);
                 if(rs.next())
@@ -152,6 +150,7 @@ public class Login extends javax.swing.JFrame {
                     jXLoginPane1.setPassword("".toCharArray());
                     JOptionPane.showMessageDialog(rootPane,"Wrong Username or Password.");
             
+                }
                 }
         
             }
