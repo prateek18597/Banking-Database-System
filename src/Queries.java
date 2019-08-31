@@ -67,6 +67,43 @@ public class Queries {
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
             
+            String query="Select UserId from NetbankingC where UserId='"+userId+"'";
+            rs=stat.executeQuery(query);
+            if(rs.next())
+            {
+                return false;
+            }
+            else
+            {
+                return  true;
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+        }
+        return false; 
+    }
+    
+    public static Boolean UserIdAvailablilityE(String userId) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            
             String query="Select UserId from Netbanking where UserId='"+userId+"'";
             rs=stat.executeQuery(query);
             if(rs.next())
@@ -93,7 +130,7 @@ public class Queries {
     }
     
     public static Boolean InsertNetbanking(String UserId,String Password,
-            String TransactionPassword,int AccountNo,String LastLogin,String Role) throws SQLException
+            String TransactionPassword,int AccountNo,String LastLogin) throws SQLException
     {
         Connection myConn=null;
         Statement stat=null;
@@ -104,7 +141,37 @@ public class Queries {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
-            String query="Insert into Netbanking values ('"+UserId+"','"+Password+"','"+TransactionPassword+"',"+AccountNo+",curdate(),'"+Role+"')";
+            String query="Insert into NetbankingC values ('"+UserId+"','"+Password+"','"+TransactionPassword+"',"+AccountNo+",curdate())";
+            stat.executeUpdate(query);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            myConn.rollback();
+            return false;
+        }
+        finally
+        {
+            myConn.commit();
+            stat.close();
+            myConn.close();
+            return true;
+        }
+    }
+    
+    public static Boolean InsertNetbankingE(String UserId,String Password,
+            int AccountNo,String LastLogin) throws SQLException
+    {
+        Connection myConn=null;
+        Statement stat=null;
+        ResultSet rs=null;
+        
+        try
+        {
+            myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
+            myConn.setAutoCommit(false);
+            stat=myConn.createStatement();
+            String query="Insert into Netbanking values ('"+UserId+"','"+Password+"',"+AccountNo+",curdate())";
             stat.executeUpdate(query);
         }
         catch(Exception e)
@@ -363,7 +430,7 @@ public class Queries {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
-            String query="Update Netbanking set Password='"+password+"' where AccountNo="+CustomerInfo.accountno;
+            String query="Update NetbankingC set Password='"+password+"' where AccountNo="+CustomerInfo.accountno;
             int k1=stat.executeUpdate(query);
             if(k1==0)
             {
@@ -403,7 +470,7 @@ public class Queries {
             myConn=DriverManager.getConnection(Info.url,Info.user,Info.pass);
             myConn.setAutoCommit(false);
             stat=myConn.createStatement();
-            String query="Update Netbanking set TransactionPassword='"+password+"' where AccountNo="+CustomerInfo.accountno;
+            String query="Update NetbankingC set TransactionPassword='"+password+"' where AccountNo="+CustomerInfo.accountno;
             int k1=stat.executeUpdate(query);
             if(k1==0)
             {
